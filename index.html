@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хэн бэ? - Тэмцээн</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #764ba2;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.2em;
+            color: #764ba2;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .player-info {
+            text-align: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .login-screen {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .login-screen h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9em;
+            text-align: left;
+        }
+
+        input, select {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            margin-top: 10px;
+        }
+        
+        .person-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .person-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .avatar {
+            width: 540px;
+            height: 540px;
+            border-radius: 15px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 300px;
+            margin: 0 auto 20px;
+            border: 4px solid #667eea;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .person-number {
+            font-size: 1.5em;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .guess-section {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .result.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        
+        .result.partial {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffeeba;
+        }
+        
+        .result.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        
+        .final-score {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .final-score h2 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .leaderboard {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .leaderboard h3 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+
+        .leaderboard-item.top1 {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .leaderboard-item.top2 {
+            background: linear-gradient(135deg, #c0c0c0 0%, #e0e0e0 100%);
+            font-weight: bold;
+        }
+
+        .leaderboard-item.top3 {
+            background: linear-gradient(135deg, #cd7f32 0%, #daa06d 100%);
+            font-weight: bold;
+        }
+
+        .rank {
+            font-weight: bold;
+            margin-right: 10px;
+            min-width: 30px;
+        }
+
+        .player-name {
+            flex: 1;
+        }
+
+        .player-score {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Хэн бэ?</h1>
+        <div class="subtitle">🏆 Тэмцээн</div>
+        
+        <div id="login-screen" class="login-screen">
+            <h2>Нэрээ оруулна уу</h2>
+            <div class="input-group">
+                <label for="player-name">Таны нэр:</label>
+                <input type="text" id="player-name" placeholder="Нэрээ оруулна уу" maxlength="20">
+            </div>
+            <button class="btn" onclick="startGame()">Тоглоом эхлүүлэх</button>
+            <button class="btn btn-secondary" onclick="showLeaderboard()">Тэргүүлэгчдийг харах</button>
+        </div>
+
+        <div id="game-screen" class="hidden">
+            <div class="player-info">
+                Тоглогч: <span id="current-player"></span>
+            </div>
+            <div class="score">Оноо: <span id="score">0</span> / <span id="total">0</span></div>
+            <div id="game-area"></div>
+        </div>
+
+        <div id="final-screen" class="hidden"></div>
+        
+        <div id="leaderboard-screen" class="hidden">
+            <div class="tab-buttons">
+                <button class="tab-btn" onclick="showLeaderboard()">Тэргүүлэгчид</button>
+                <button class="tab-btn active" onclick="backToLogin()">Буцах</button>
+            </div>
+            <div class="leaderboard">
+                <h3>🏆 Тэргүүлэгчид</h3>
+                <div id="leaderboard-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const people = [
+            { avatar: '<img src="images/1.png" >', age: 34, race: 'Цагаан', gender: 'Эрэгтэй' },
+            { avatar: '<img src="images/2.png" >', age: 15, race: 'Хар', gender: 'Эмэгтэй' },
+            { avatar: '<img src="images/3.png" >', age: 45, race: 'Цагаан', gender: 'Эрэгтэй' },
+            { avatar: '<img src="images/4.png" >', age: 67, race: 'Ази', gender: 'Эмэгтэй' },
+            { avatar: '<img src="images/5.png" >', age: 22, race: 'Испани', gender: 'Эрэгтэй' },
+            { avatar: '<img src="images/1.png" >', age: 31, race: 'Цагаан', gender: 'Эмэгтэй' },
+            { avatar: '<img src="images/1.png" >', age: 41, race: 'Хар', gender: 'Эрэгтэй' },
+            { avatar: '<img src="images/1.png" >', age: 25, race: 'Ази', gender: 'Эмэгтэй' },
+            { avatar: '<img src="images/1.png" >', age: 53, race: 'Испани', gender: 'Эрэгтэй' },
+            { avatar: '<img src="images/1.png" >', age: 39, race: 'Хар', gender: 'Эмэгтэй' }
+        ];
+
+        let currentPerson = 0;
+        let score = 0;
+        let answered = false;
+        let playerName = '';
+
+        const races = ['Цагаан', 'Хар', 'Ази', 'Испани', 'Бусад'];
+        const genders = ['Эрэгтэй', 'Эмэгтэй'];
+
+        async function startGame() {
+            const nameInput = document.getElementById('player-name');
+            playerName = nameInput.value.trim();
+            
+            if (!playerName) {
+                alert('Нэрээ оруулна уу!');
+                return;
+            }
+
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            document.getElementById('current-player').textContent = playerName;
+            
+            currentPerson = 0;
+            score = 0;
+            answered = false;
+            updateScore();
+            renderPerson();
+        }
+
+        function renderPerson() {
+            if (currentPerson >= people.length) {
+                showFinalScore();
+                return;
+            }
+
+            const person = people[currentPerson];
+            const gameArea = document.getElementById('game-area');
+            
+            gameArea.innerHTML = `
+                <div class="person-card">
+                    <div class="person-header">
+                        <div class="avatar">${person.avatar}</div>
+                        <div class="person-number">Хүн ${currentPerson + 1} / ${people.length}</div>
+                    </div>
+                    <div class="guess-section">
+                        <div class="input-group">
+                            <label for="age-guess">Насыг таа (нас):</label>
+                            <input type="number" id="age-guess" min="1" max="100" placeholder="Насыг оруулна уу">
+                        </div>
+                        <div class="input-group">
+                            <label for="race-guess">Үндэс угсааг таа:</label>
+                            <select id="race-guess">
+                                <option value="">-- Сонгоно уу --</option>
+                                ${races.map(r => `<option value="${r}">${r}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="gender-guess">Хүйсийг таа:</label>
+                            <select id="gender-guess">
+                                <option value="">-- Сонгоно уу --</option>
+                                ${genders.map(g => `<option value="${g}">${g}</option>`).join('')}
+                            </select>
+                        </div>
+                        <button class="btn" onclick="submitGuess()">Хариулах</button>
+                    </div>
+                    <div id="result-area"></div>
+                </div>
+            `;
+        }
+
+        function submitGuess() {
+            if (answered) return;
+
+            const ageGuess = parseInt(document.getElementById('age-guess').value);
+            const raceGuess = document.getElementById('race-guess').value;
+            const genderGuess = document.getElementById('gender-guess').value;
+
+            if (!ageGuess || !raceGuess || !genderGuess) {
+                alert('Бүх талбарыг бөглөнө үү!');
+                return;
+            }
+
+            const person = people[currentPerson];
+            let points = 0;
+            let feedback = [];
+
+            const ageDiff = Math.abs(ageGuess - person.age);
+            if (ageDiff === 0) {
+                points += 3;
+                feedback.push(`✅ Нас яг зөв! (${person.age})`);
+            } else if (ageDiff <= 3) {
+                points += 2;
+                feedback.push(`✅ Нас ойрхон! (Бодит: ${person.age}, Таны хариулт: ${ageGuess}, Зөрүү: ${ageDiff})`);
+            } else if (ageDiff <= 5) {
+                points += 1;
+                feedback.push(`⚠️ Нас бага зэрэг ойрхон (Бодит: ${person.age}, Таны хариулт: ${ageGuess}, Зөрүү: ${ageDiff})`);
+            } else {
+                feedback.push(`❌ Нас буруу (Бодит: ${person.age}, Таны хариулт: ${ageGuess}, Зөрүү: ${ageDiff})`);
+            }
+
+            if (raceGuess === person.race) {
+                points += 1;
+                feedback.push(`✅ Үндэс угсаа зөв! (${person.race})`);
+            } else {
+                feedback.push(`❌ Үндэс угсаа буруу (Бодит: ${person.race})`);
+            }
+
+            if (genderGuess === person.gender) {
+                points += 1;
+                feedback.push(`✅ Хүйс зөв! (${person.gender})`);
+            } else {
+                feedback.push(`❌ Хүйс буруу (Бодит: ${person.gender})`);
+            }
+
+            score += points;
+            updateScore();
+
+            const resultArea = document.getElementById('result-area');
+            const resultClass = points >= 4 ? 'correct' : points >= 3 ? 'partial' : 'incorrect';
+            
+            resultArea.innerHTML = `
+                <div class="result ${resultClass}">
+                    <div style="font-size: 1.2em; margin-bottom: 10px;">+${points} оноо</div>
+                    ${feedback.join('<br>')}
+                    <button class="btn" onclick="nextPerson()" style="margin-top: 15px;">Дараагийн хүн</button>
+                </div>
+            `;
+
+            answered = true;
+        }
+
+        function nextPerson() {
+            currentPerson++;
+            answered = false;
+            renderPerson();
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('total').textContent = currentPerson * 5;
+        }
+
+        async function showFinalScore() {
+            const maxScore = people.length * 5;
+            const percentage = Math.round((score / maxScore) * 100);
+            
+            let message = '';
+            if (percentage >= 80) message = '🏆 Гайхалтай! Та мэргэжилтэн байна!';
+            else if (percentage >= 60) message = '🎉 Маш сайн! Танд сайн мэдрэмж бий!';
+            else if (percentage >= 40) message = '👍 Муу биш! Үргэлжлүүлээрэй!';
+            else message = '💪 Үргэлжлүүлээрэй! Энэ хэцүү байдаг!';
+
+            // Save score to leaderboard
+            await saveScore(playerName, score);
+
+            document.getElementById('game-screen').classList.add('hidden');
+            const finalScreen = document.getElementById('final-screen');
+            finalScreen.classList.remove('hidden');
+            finalScreen.innerHTML = `
+                <div class="final-score">
+                    <h2>Тоглоом дууслаа!</h2>
+                    <div style="font-size: 3em; margin: 20px 0;">${score} / ${maxScore}</div>
+                    <div style="font-size: 1.5em;">${percentage}%</div>
+                    <div style="font-size: 1.2em; margin-top: 15px;">${message}</div>
+                    <button class="btn" onclick="restartGame()">Дахин тоглох</button>
+                    <button class="btn btn-secondary" onclick="viewLeaderboard()">Тэргүүлэгчдийг харах</button>
+                </div>
+            `;
+        }
+
+        async function saveScore(name, score) {
+            try {
+                const key = `player:${name}:${Date.now()}`;
+                await window.storage.set(key, JSON.stringify({ name, score, date: new Date().toISOString() }), true);
+            } catch (error) {
+                console.error('Оноо хадгалахад алдаа гарлаа:', error);
+            }
+        }
+
+        async function loadLeaderboard() {
+            try {
+                const result = await window.storage.list('player:', true);
+                if (!result || !result.keys) return [];
+
+                const scores = [];
+                for (const key of result.keys) {
+                    try {
+                        const data = await window.storage.get(key, true);
+                        if (data && data.value) {
+                            scores.push(JSON.parse(data.value));
+                        }
+                    } catch (e) {
+                        console.error('Оноо уншихад алдаа:', e);
+                    }
+                }
+
+                // Group by player name and keep best score
+                const bestScores = {};
+                scores.forEach(s => {
+                    if (!bestScores[s.name] || s.score > bestScores[s.name].score) {
+                        bestScores[s.name] = s;
+                    }
+                });
+
+                return Object.values(bestScores).sort((a, b) => b.score - a.score);
+            } catch (error) {
+                console.error('Тэргүүлэгчдийг ачааллахад алдаа:', error);
+                return [];
+            }
+        }
+
+        async function showLeaderboard() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('leaderboard-screen').classList.remove('hidden');
+            
+            const leaderboard = await loadLeaderboard();
+            const listEl = document.getElementById('leaderboard-list');
+            
+            if (leaderboard.length === 0) {
+                listEl.innerHTML = '<div style="text-align: center; padding: 20px;">Хараахан тоглоогүй байна</div>';
+                return;
+            }
+
+            listEl.innerHTML = leaderboard.map((player, index) => {
+                let className = '';
+                let medal = '';
+                if (index === 0) {
+                    className = 'top1';
+                    medal = '🥇 ';
+                } else if (index === 1) {
+                    className = 'top2';
+                    medal = '🥈 ';
+                } else if (index === 2) {
+                    className = 'top3';
+                    medal = '🥉 ';
+                }
+                
+                return `
+                    <div class="leaderboard-item ${className}">
+                        <span class="rank">${medal}${index + 1}.</span>
+                        <span class="player-name">${player.name}</span>
+                        <span class="player-score">${player.score} оноо</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function backToLogin() {
+            document.getElementById('leaderboard-screen').classList.add('hidden');
+            document.getElementById('final-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        function viewLeaderboard() {
+            document.getElementById('final-screen').classList.add('hidden');
+            showLeaderboard();
+        }
+
+        function restartGame() {
+            document.getElementById('final-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            currentPerson = 0;
+            score = 0;
+            answered = false;
+            updateScore();
+            renderPerson();
+        }
+    </script>
+</body>
+</html>
