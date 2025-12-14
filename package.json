@@ -1,5 +1,5 @@
 {
-  "name": "хэн-бэ-multiplayer-game",
+  "name": "kahoot-multiplayer-game",
   "version": "1.0.0",
   "description": "Kahoot-style multiplayer guessing game",
   "main": "server/server.js",
