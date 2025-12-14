@@ -306,11 +306,63 @@
             <button class="btn btn-secondary" onclick="showLeaderboard()">Тэргүүлэгчдийг харах</button>
         </div>
 
+        <div id="waiting-screen" class="hidden">
+            <div class="person-card" style="text-align: center; padding: 40px;">
+                <div style="font-size: 4em; margin-bottom: 20px;">⏳</div>
+                <h2 style="color: #667eea; margin-bottom: 20px;">Тоглоом удахгүй эхэлнэ</h2>
+                
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; margin-bottom: 20px;">
+                    <div style="font-size: 1.2em; margin-bottom: 10px;">Тоглоом эхлэх хүртэл</div>
+                    <div id="countdown-timer" style="font-size: 4em; font-weight: bold; font-family: monospace;"></div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 25px; border-radius: 15px; margin-bottom: 20px;">
+                    <div style="font-size: 1.2em; margin-bottom: 10px;">👥 Хүлээж буй тоглогчид</div>
+                    <div id="waiting-players-count" style="font-size: 3.5em; font-weight: bold; font-family: monospace;">0</div>
+                    <div style="font-size: 0.9em; margin-top: 10px; opacity: 0.9;">Та: <span id="waiting-player-name" style="font-weight: bold;"></span></div>
+                </div>
+
+                <div id="waiting-players-list" style="background: #f5f7fa; padding: 20px; border-radius: 10px; margin-bottom: 20px; max-height: 200px; overflow-y: auto;">
+                    <h3 style="color: #667eea; margin-bottom: 15px; text-align: center;">🎮 Нэгдсэн тоглогчид</h3>
+                    <div id="players-container"></div>
+                </div>
+                
+                <div style="background: #f5f7fa; padding: 20px; border-radius: 10px; text-align: left;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📋 Тоглоомын дүрэм:</h3>
+                    <ul style="line-height: 1.8; color: #333;">
+                        <li>10 хүний зураг харагдана</li>
+                        <li>Тус бүрийн нас, үндэс угсаа, хүйсийг тааж байна</li>
+                        <li>Нас яг зөв бол 3 оноо</li>
+                        <li>Нас 3-аас бага зөрүүтэй бол 2 оноо</li>
+                        <li>Нас 5-аас бага зөрүүтэй бол 1 оноо</li>
+                        <li>Үндэс угсаа зөв бол 1 оноо</li>
+                        <li>Хүйс зөв бол 1 оноо</li>
+                        <li>Нийт боломжит оноо: 50</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="profile-screen" class="hidden">
+            <div class="player-info" style="font-size: 1.3em; padding: 20px;">
+                <div style="font-size: 2em; margin-bottom: 10px;">👤</div>
+                <div>Тоглогч: <span id="profile-player-name"></span></div>
+            </div>
+            <div class="leaderboard">
+                <h3>Таны статистик</h3>
+                <div id="player-stats" style="text-align: center; padding: 20px; color: #333;"></div>
+            </div>
+            <button class="btn" onclick="beginGame()">Тоглоом эхлүүлэх</button>
+            <button class="btn btn-secondary" onclick="backToLogin()">Буцах</button>
+        </div>
+        
         <div id="game-screen" class="hidden">
             <div class="player-info">
                 Тоглогч: <span id="current-player"></span>
             </div>
-            <div class="score">Оноо: <span id="score">0</span> / <span id="total">0</span></div>
+            <div class="score">
+                Оноо: <span id="score">0</span> / <span id="total">0</span>
+            </div>
             <div id="game-area"></div>
         </div>
 
@@ -330,24 +382,27 @@
 
     <script>
         const people = [
-            { avatar: '<img src="images/1.png" >', age: 34, race: 'Цагаан', gender: 'Эрэгтэй' },
-            { avatar: '<img src="images/2.png" >', age: 15, race: 'Хар', gender: 'Эмэгтэй' },
-            { avatar: '<img src="images/3.png" >', age: 45, race: 'Цагаан', gender: 'Эрэгтэй' },
-            { avatar: '<img src="images/4.png" >', age: 67, race: 'Ази', gender: 'Эмэгтэй' },
-            { avatar: '<img src="images/5.png" >', age: 22, race: 'Испани', gender: 'Эрэгтэй' },
-            { avatar: '<img src="images/1.png" >', age: 31, race: 'Цагаан', gender: 'Эмэгтэй' },
-            { avatar: '<img src="images/1.png" >', age: 41, race: 'Хар', gender: 'Эрэгтэй' },
-            { avatar: '<img src="images/1.png" >', age: 25, race: 'Ази', gender: 'Эмэгтэй' },
-            { avatar: '<img src="images/1.png" >', age: 53, race: 'Испани', gender: 'Эрэгтэй' },
-            { avatar: '<img src="images/1.png" >', age: 39, race: 'Хар', gender: 'Эмэгтэй' }
+            { avatar: '👨‍💼', age: 34, race: 'Цагаан', gender: 'Эрэгтэй' },
+            { avatar: '👩‍🦱', age: 28, race: 'Хар', gender: 'Эмэгтэй' },
+            { avatar: '👨‍🦰', age: 45, race: 'Цагаан', gender: 'Эрэгтэй' },
+            { avatar: '👩‍🦳', age: 67, race: 'Ази', gender: 'Эмэгтэй' },
+            { avatar: '👨', age: 22, race: 'Латин', gender: 'Эрэгтэй' },
+            { avatar: '👩‍🦰', age: 31, race: 'Цагаан', gender: 'Эмэгтэй' },
+            { avatar: '👨‍🦱', age: 41, race: 'Хар', gender: 'Эрэгтэй' },
+            { avatar: '👩', age: 25, race: 'Ази', gender: 'Эмэгтэй' },
+            { avatar: '👨‍🦲', age: 53, race: 'Энэтхэг', gender: 'Эрэгтэй' },
+            { avatar: '👩‍🦲', age: 39, race: 'Ойрхи Дорнод', gender: 'Эмэгтэй' }
         ];
 
         let currentPerson = 0;
         let score = 0;
         let answered = false;
         let playerName = '';
+        let countdownInterval = null;
+        let playersUpdateInterval = null;
+        let gameSessionId = null;
 
-        const races = ['Цагаан', 'Хар', 'Ази', 'Испани', 'Бусад'];
+        const races = ['Цагаан', 'Хар', 'Энэтхэг', 'Латин', 'Ази', 'Ойрхи Дорнод'];
         const genders = ['Эрэгтэй', 'Эмэгтэй'];
 
         async function startGame() {
@@ -359,7 +414,213 @@
                 return;
             }
 
+            // Create unique game session ID
+            gameSessionId = Date.now();
+
+            // Add player to waiting room
+            await addPlayerToWaitingRoom(playerName);
+
+            // Show waiting screen
             document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('waiting-screen').classList.remove('hidden');
+            document.getElementById('waiting-player-name').textContent = playerName;
+            
+            // Start updating players list
+            updateWaitingPlayers();
+            playersUpdateInterval = setInterval(updateWaitingPlayers, 2000); // Update every 2 seconds
+            
+            // Start 3 minute countdown
+            startCountdown(180); // 180 seconds = 3 minutes
+        }
+
+        async function addPlayerToWaitingRoom(name) {
+            try {
+                const key = `waiting:${gameSessionId}:${name}`;
+                const data = {
+                    name: name,
+                    joinedAt: Date.now(),
+                    sessionId: gameSessionId
+                };
+                await window.storage.set(key, JSON.stringify(data), true);
+            } catch (error) {
+                console.error('Хүлээлгийн өрөөнд нэмэхэд алдаа:', error);
+            }
+        }
+
+        async function updateWaitingPlayers() {
+            try {
+                const result = await window.storage.list('waiting:', true);
+                if (!result || !result.keys) {
+                    document.getElementById('waiting-players-count').textContent = '0';
+                    document.getElementById('players-container').innerHTML = '<div style="text-align: center; color: #999;">Хүлээж буй тоглогч алга</div>';
+                    return;
+                }
+
+                const players = [];
+                const now = Date.now();
+                const threeMinutesAgo = now - (3 * 60 * 1000);
+
+                for (const key of result.keys) {
+                    try {
+                        const data = await window.storage.get(key, true);
+                        if (data && data.value) {
+                            const playerData = JSON.parse(data.value);
+                            // Only show players from last 3 minutes
+                            if (playerData.joinedAt > threeMinutesAgo) {
+                                players.push(playerData);
+                            } else {
+                                // Clean up old entries
+                                await window.storage.delete(key, true);
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Тоглогч уншихад алдаа:', e);
+                    }
+                }
+
+                // Update count
+                document.getElementById('waiting-players-count').textContent = players.length;
+
+                // Update players list
+                const container = document.getElementById('players-container');
+                if (players.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; color: #999;">Хүлээж буй тоглогч алга</div>';
+                } else {
+                    container.innerHTML = players
+                        .sort((a, b) => a.joinedAt - b.joinedAt)
+                        .map((player, index) => {
+                            const isCurrentPlayer = player.name === playerName;
+                            return `
+                                <div style="display: flex; align-items: center; padding: 10px; background: ${isCurrentPlayer ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'white'}; color: ${isCurrentPlayer ? 'white' : '#333'}; border-radius: 8px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                    <div style="width: 35px; height: 35px; background: ${isCurrentPlayer ? 'white' : '#667eea'}; color: ${isCurrentPlayer ? '#667eea' : 'white'}; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px; font-size: 0.9em;">
+                                        ${index + 1}
+                                    </div>
+                                    <div style="flex: 1; font-weight: ${isCurrentPlayer ? 'bold' : '600'}; font-size: 1em;">
+                                        ${player.name} ${isCurrentPlayer ? '(Та)' : ''}
+                                    </div>
+                                    <div style="color: ${isCurrentPlayer ? 'rgba(255,255,255,0.8)' : '#999'}; font-size: 0.85em;">
+                                        ${getTimeAgo(player.joinedAt)}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                }
+            } catch (error) {
+                console.error('Тоглогчдыг шинэчлэхэд алдаа:', error);
+            }
+        }
+
+        function getTimeAgo(timestamp) {
+            const seconds = Math.floor((Date.now() - timestamp) / 1000);
+            if (seconds < 10) return 'Дөнгөж сая';
+            if (seconds < 60) return `${seconds} сек өмнө`;
+            const minutes = Math.floor(seconds / 60);
+            if (minutes === 1) return '1 мин өмнө';
+            return `${minutes} мин өмнө`;
+        }
+
+        async function removePlayerFromWaitingRoom() {
+            try {
+                const key = `waiting:${gameSessionId}:${playerName}`;
+                await window.storage.delete(key, true);
+            } catch (error) {
+                console.error('Тоглогчийг устгахад алдаа:', error);
+            }
+        }
+
+        function startCountdown(seconds) {
+            let remainingTime = seconds;
+            const timerEl = document.getElementById('countdown-timer');
+            
+            function updateTimer() {
+                const minutes = Math.floor(remainingTime / 60);
+                const secs = remainingTime % 60;
+                timerEl.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
+                
+                if (remainingTime <= 0) {
+                    clearInterval(countdownInterval);
+                    clearInterval(playersUpdateInterval);
+                    
+                    // Remove player from waiting room
+                    removePlayerFromWaitingRoom();
+                    
+                    // Move to profile screen when countdown ends
+                    document.getElementById('waiting-screen').classList.add('hidden');
+                    document.getElementById('profile-screen').classList.remove('hidden');
+                    document.getElementById('profile-player-name').textContent = playerName;
+                    loadPlayerStats();
+                } else {
+                    remainingTime--;
+                }
+            }
+            
+            updateTimer(); // Initial call
+            countdownInterval = setInterval(updateTimer, 1000);
+        }
+
+        async function loadPlayerStats() {
+            const statsEl = document.getElementById('player-stats');
+            try {
+                const result = await window.storage.list('player:', true);
+                if (!result || !result.keys) {
+                    statsEl.innerHTML = `
+                        <div style="font-size: 1.2em;">Та анх удаа тоглож байна!</div>
+                        <div style="margin-top: 10px; color: #667eea;">🎮 Амжилт хүсье!</div>
+                    `;
+                    return;
+                }
+
+                // Find all scores for this player
+                const playerScores = [];
+                for (const key of result.keys) {
+                    try {
+                        const data = await window.storage.get(key, true);
+                        if (data && data.value) {
+                            const scoreData = JSON.parse(data.value);
+                            if (scoreData.name === playerName) {
+                                playerScores.push(scoreData.score);
+                            }
+                        }
+                    } catch (e) {
+                        // Skip invalid entries
+                    }
+                }
+
+                if (playerScores.length === 0) {
+                    statsEl.innerHTML = `
+                        <div style="font-size: 1.2em;">Та анх удаа тоглож байна!</div>
+                        <div style="margin-top: 10px; color: #667eea;">🎮 Амжилт хүсье!</div>
+                    `;
+                } else {
+                    const bestScore = Math.max(...playerScores);
+                    const avgScore = Math.round(playerScores.reduce((a, b) => a + b, 0) / playerScores.length);
+                    const gamesPlayed = playerScores.length;
+
+                    statsEl.innerHTML = `
+                        <div style="margin-bottom: 15px;">
+                            <div style="font-size: 1.1em; font-weight: bold; color: #667eea;">🏆 Хамгийн өндөр оноо</div>
+                            <div style="font-size: 2em; font-weight: bold; margin-top: 5px;">${bestScore}/50</div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                            <div>
+                                <div style="font-weight: 600;">📊 Дундаж оноо</div>
+                                <div style="font-size: 1.5em; color: #667eea;">${avgScore}</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 600;">🎮 Тоглосон</div>
+                                <div style="font-size: 1.5em; color: #667eea;">${gamesPlayed}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Статистик ачааллахад алдаа:', error);
+                statsEl.innerHTML = '<div>Статистик ачаалж чадсангүй</div>';
+            }
+        }
+
+        function beginGame() {
+            document.getElementById('profile-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
             document.getElementById('current-player').textContent = playerName;
             
@@ -589,9 +850,28 @@
         }
 
         function backToLogin() {
+            // Clear countdown if it's running
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            
+            // Clear players update interval
+            if (playersUpdateInterval) {
+                clearInterval(playersUpdateInterval);
+                playersUpdateInterval = null;
+            }
+            
+            // Remove from waiting room
+            if (gameSessionId && playerName) {
+                removePlayerFromWaitingRoom();
+            }
+            
             document.getElementById('leaderboard-screen').classList.add('hidden');
             document.getElementById('final-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('profile-screen').classList.add('hidden');
+            document.getElementById('waiting-screen').classList.add('hidden');
             document.getElementById('login-screen').classList.remove('hidden');
         }
 
@@ -600,14 +880,11 @@
             showLeaderboard();
         }
 
-        function restartGame() {
+        async function restartGame() {
             document.getElementById('final-screen').classList.add('hidden');
-            document.getElementById('game-screen').classList.remove('hidden');
-            currentPerson = 0;
-            score = 0;
-            answered = false;
-            updateScore();
-            renderPerson();
+            document.getElementById('profile-screen').classList.remove('hidden');
+            document.getElementById('profile-player-name').textContent = playerName;
+            await loadPlayerStats();
         }
     </script>
 </body>
